@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Danniel Ribeiro, Ph.D.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#111110;--ink:#E8E1D4;--ac:#C85C3C;--mu:#9A948B;--dm:rgba(232,225,212,.06);--db:rgba(232,225,212,.12);
+  --sans:'Inter',system-ui,sans-serif;--serif:'Source Serif 4',Georgia,serif;--mono:'JetBrains Mono',monospace;
+  --rad:4px;--fs:16px
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:var(--fs);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* HERO */
+#hero{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:100;transition:opacity .6s,visibility .6s}
+#hero.h{opacity:0;visibility:hidden;pointer-events:none}
+#hero .bg{position:absolute;inset:0;background-size:cover;background-position:center 20%;filter:brightness(.28)}
+#hero .ct{position:relative;z-index:2;text-align:center;padding:24px}
+#hero h1{font-family:var(--serif);font-size:clamp(36px,7vw,56px);font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+#hero .tg{font-family:var(--sans);font-size:clamp(12px,1.6vw,15px);color:var(--mu);letter-spacing:.22em;text-transform:uppercase;margin-bottom:28px}
+.hph{display:flex;gap:5px;justify-content:center;margin-bottom:32px}
+.hph img{height:clamp(55px,9vw,75px);width:auto;border-radius:var(--rad);opacity:.7;transition:opacity .3s}
+.hph img:hover{opacity:1}
+.ebtn{font-family:var(--sans);font-size:13px;color:var(--ac);letter-spacing:.28em;text-transform:uppercase;border:1.5px solid var(--ac);padding:14px 36px;cursor:pointer;border-radius:var(--rad);transition:all .25s;font-weight:500;display:inline-block}
+.ebtn:hover{background:var(--ac);color:var(--bg)}
+
+/* APP */
+#app{display:flex;flex-direction:column;height:100vh;min-height:500px}
+
+/* HEADER with photos */
+#hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid var(--db);flex-shrink:0;gap:12px}
+#hdr .left{display:flex;align-items:center;gap:14px}
+#hdr .pics{display:flex;gap:3px}
+#hdr .pics img{height:32px;width:auto;border-radius:2px;opacity:.8}
+#hdr h1{font-family:var(--serif);font-size:17px;font-weight:600;cursor:pointer;white-space:nowrap}
+#hdr h1:hover{color:var(--ac)}
+#hdr .phd{font-family:var(--mono);font-size:10px;color:var(--mu);margin-left:6px;font-weight:400}
+#hdr .tag{font-family:var(--sans);font-size:11px;color:var(--mu);letter-spacing:.1em}
+
+/* NAV */
+#nav{display:flex;border-bottom:1px solid var(--db);flex-shrink:0}
+.nb{flex:1;padding:13px 8px;border:none;cursor:pointer;background:0;border-bottom:2.5px solid transparent;font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);transition:all .2s;font-weight:500}
+.nb.on{background:rgba(200,92,60,.06);border-bottom-color:var(--ac);color:var(--ink)}
+.nb:hover:not(.on){color:var(--ink);background:var(--dm)}
+
+/* CONTENT */
+#ct{flex:1;overflow:hidden;position:relative}
+.pane{display:none;width:100%;height:100%;position:absolute;inset:0;flex-direction:column}.pane.on{display:flex}
+
+/* SUBTABS */
+.stabs{display:flex;gap:0;border-bottom:1px solid var(--db);flex-shrink:0;background:rgba(200,92,60,.02)}
+.stab{padding:8px 16px;border:none;cursor:pointer;background:0;font-family:var(--sans);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);transition:all .15s;font-weight:500;border-bottom:2px solid transparent}
+.stab.on{color:var(--ink);border-bottom-color:var(--ac)}
+
+/* CARDS (work selector) */
+.cards{display:flex;gap:1px;background:var(--db);flex-shrink:0}
+.cards button{flex:1;padding:10px 12px;border:none;cursor:pointer;text-align:left;background:var(--bg);transition:all .15s;position:relative}
+.cards button.on{background:rgba(200,92,60,.05)}
+.cards button.on::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--ac)}
+.cards .y{font-family:var(--mono);font-size:9px;color:var(--mu);letter-spacing:.1em;margin-bottom:2px}
+.cards .t{font-family:var(--serif);font-size:clamp(12px,1.2vw,15px);font-style:italic;color:var(--mu);line-height:1.3}
+.cards button.on .t{color:var(--ink)}
+.cards button:hover:not(.on) .t{color:var(--ink)}
+
+/* SPLIT */
+.row{display:flex;flex:1;min-height:0}
+.vw{flex:1.4;position:relative;overflow:hidden;background:#f0ede8;min-width:0}
+.ip{flex:1;padding:20px 24px;overflow-y:auto;border-left:1px solid var(--db);min-width:300px;max-width:500px}
+
+/* SCORE VIEWER - FIXED ZOOM */
+.sv{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:zoom-in;position:relative}
+.sv img{max-width:100%;max-height:100%;object-fit:contain;transition:none;user-select:none}
+.sv.z{overflow:auto;cursor:grab;align-items:flex-start;justify-content:flex-start}
+.sv.z img{max-width:none;max-height:none;width:220%;cursor:grab}
+
+/* SCORE NAV */
+.sn{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;z-index:10}
+.sn button{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(17,17,16,.88);backdrop-filter:blur(8px);border:1px solid rgba(232,225,212,.2);color:var(--ink);font-size:18px;border-radius:var(--rad);cursor:pointer;transition:background .15s}
+.sn button:hover{background:rgba(200,92,60,.5)}
+.sn span{font-family:var(--mono);font-size:12px;color:var(--ink);background:rgba(17,17,16,.88);padding:8px 16px;border-radius:var(--rad);letter-spacing:.05em}
+
+/* INFO PANEL */
+.lbl{font-family:var(--sans);font-size:11px;color:var(--ac);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:500}
+.ip h2{font-family:var(--serif);font-size:clamp(20px,2.5vw,28px);font-weight:400;font-style:italic;line-height:1.2;margin-bottom:8px}
+.inst{font-family:var(--sans);font-size:13px;color:var(--mu);margin-bottom:5px;line-height:1.5}
+.det{font-family:var(--sans);font-size:12px;color:var(--mu);margin-bottom:12px}
+.desc{font-size:15px;color:rgba(232,225,212,.78);line-height:1.7;margin-bottom:18px}.desc em{color:var(--ink)}
+.sep{border-top:1px solid var(--dm);padding-top:14px;margin-top:16px}
+.link{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border:1.5px solid var(--db);color:var(--mu);text-decoration:none;font-family:var(--sans);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:6px;margin-top:8px;border-radius:var(--rad);transition:all .2s;font-weight:500}
+.link:hover,.link.hi{border-color:var(--ac);color:var(--ac)}
+.lang{font-family:var(--sans);font-size:11px;color:var(--mu);cursor:pointer;padding:5px 10px;border:1.5px solid var(--db);background:0;margin-right:4px;border-radius:var(--rad);font-weight:500;transition:all .15s}
+.lang.on{color:var(--ink);border-color:var(--ac);background:rgba(200,92,60,.08)}
+
+/* AUDIO PLAYER */
+.ap{margin-top:14px;padding:14px;background:rgba(200,92,60,.04);border:1px solid rgba(200,92,60,.1);border-radius:var(--rad)}
+.ap .al{font-family:var(--sans);font-size:11px;color:var(--ac);letter-spacing:.06em;margin-bottom:3px;font-weight:500}
+.ap .asub{font-family:var(--sans);font-size:10px;color:var(--mu);margin-bottom:8px}
+.ap audio{width:100%;height:40px;outline:none;border-radius:var(--rad)}
+
+/* PERFORMANCE */
+.pfv{flex:1.4;position:relative;overflow:hidden;min-width:0}
+.pfv>img{width:100%;height:100%;object-fit:cover;opacity:.4;transition:opacity .3s}
+.pfv .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pbtn{width:80px;height:80px;border-radius:50%;border:2px solid var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;margin-bottom:16px}
+.pbtn:hover{background:rgba(200,92,60,.2);transform:scale(1.05)}
+
+/* FULL-WIDTH TEXT (Research/Contact) - TWO COLUMN */
+.fw2{display:flex;height:100%;width:100%}
+.fw2 .txt{flex:1;padding:clamp(20px,3vw,40px) clamp(20px,4vw,48px);overflow-y:auto}
+.fw2 .aside{width:clamp(250px,25vw,380px);border-left:1px solid var(--db);overflow:hidden;display:flex;flex-direction:column}
+.fw2 .aside img{width:100%;height:50%;object-fit:cover;opacity:.7}
+.fw2 h2{font-family:var(--serif);font-size:clamp(20px,2.5vw,28px);font-weight:400;margin-bottom:16px;line-height:1.25}
+.fw2 p{font-size:clamp(14px,1.1vw,16px);color:rgba(232,225,212,.82);line-height:1.72;margin-bottom:18px;max-width:700px}
+.fw2 p em{color:var(--ink)}.fw2 p strong{color:var(--ink);font-weight:500}
+.cred{font-size:14px;color:var(--mu);margin-bottom:6px;line-height:1.5}.cred strong{color:var(--ink);font-weight:500}
+.cred a{color:var(--ac);text-decoration:none}.cred a:hover{text-decoration:underline}
+.clink{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none;font-family:var(--sans);font-size:14px;padding:12px 0;border-bottom:1px solid var(--dm);transition:color .15s}.clink:hover{color:var(--ac)}
+.ci{color:var(--ac);font-size:15px;width:22px;text-align:center;font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.pills span{font-size:12px;color:var(--mu);border:1px solid var(--db);padding:5px 12px;border-radius:var(--rad);font-family:var(--sans)}
+.phr{display:flex;gap:4px;margin-top:14px}.phr img{height:clamp(55px,6vw,75px);width:auto;object-fit:cover;border-radius:var(--rad);opacity:.8;cursor:pointer;transition:all .2s}.phr img:hover{opacity:1}
+.ow{font-size:13px;color:var(--mu);padding:10px 0;border-bottom:1px solid var(--dm);line-height:1.5}.ow strong{color:var(--ink);font-weight:500;font-style:italic}.ow .oy{font-family:var(--mono);font-size:10px;color:var(--ac);margin-right:8px}.ow a{color:var(--ac);text-decoration:none;font-size:11px}.ow a:hover{text-decoration:underline}
+.resimg{width:100%;border-radius:var(--rad);opacity:.8}.vdemo{margin-top:14px}.vdemo video{width:100%;border-radius:var(--rad)}.vdemo .vl{font-family:var(--sans);font-size:11px;color:var(--ac);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;font-weight:500}
+.patchimg{width:100%;border-radius:var(--rad);margin:10px 0}
+
+/* LIGHTBOX */
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.on{display:flex}#lb img{max-width:96%;max-height:94%;object-fit:contain;border-radius:var(--rad)}
+
+/* BOTTOM */
+#bot{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;border-top:1px solid var(--db);font-family:var(--sans);font-size:10px;color:var(--mu);flex-shrink:0;letter-spacing:.02em}
+#bot a{color:var(--mu);text-decoration:none}#bot a:hover{color:var(--ac)}
+
+/* RESPONSIVE */
+@media(max-width:900px){.row{flex-direction:column}.ip{border-left:none;border-top:1px solid var(--db);max-width:none;min-width:0;max-height:45vh}.vw,.pfv{min-height:35vh}#hdr .tag{display:none}.fw2{flex-direction:column}.fw2 .aside{width:100%;height:200px;border-left:none;border-top:1px solid var(--db)}}
+@media(max-width:600px){.nb{font-size:9px;padding:10px 4px;letter-spacing:.06em}.cards{flex-wrap:wrap}.cards button{min-width:45%}.ip{padding:16px}.fw2 .txt{padding:16px}#hdr .pics{display:none}}
+</style></head><body>
+
+<!-- HERO -->
+<div id="hero">
+<div class="bg" style="background-image:url('media/img-01.jpg')"></div>
+<div class="ct">
+<h1>Danniel Ribeiro</h1>
+<div class="tg">Composer, Sound Artist &amp; Performer</div>
+<div class="hph"><img src="media/img-02.jpg" alt=""><img src="media/img-03.jpg" alt=""><img src="media/img-04.jpg" alt=""></div>
+<div class="ebtn" onclick="enter()">Enter</div>
+</div></div>
+
+<!-- APP -->
+<div id="app">
+<div id="hdr">
+<div class="left">
+<div class="pics"><img src="media/img-05.jpg" alt=""><img src="media/img-06.jpg" alt=""><img src="media/img-07.jpg" alt=""></div>
+<h1 onclick="goHome()">Danniel Ribeiro<span class="phd">Ph.D.</span></h1>
+</div>
+<div class="tag">Composer, Sound Artist &amp; Performer</div>
+</div>
+
+<div id="nav">
+<button class="nb on" onclick="nav('works')">Works</button>
+<button class="nb" onclick="nav('perf')">Performance</button>
+<button class="nb" onclick="nav('res')">Research &amp; Teaching</button>
+<button class="nb" onclick="nav('contact')">Contact</button>
+</div>
+
+<div id="ct">
+<!-- WORKS -->
+<div id="p-works" class="pane on">
+<div class="stabs" id="wst"><button class="stab on" onclick="wsub('comp')">Compositions</button><button class="stab" onclick="wsub('other')">Other Works</button></div>
+<div id="wsub-comp" style="display:flex;flex-direction:column;flex:1;min-height:0">
+<div class="cards" id="wc"></div>
+<div class="row"><div class="vw"><div class="sv" id="sv"><img id="si" src="" onclick="doZoom()"></div><div class="sn"><button onclick="pg(-1)">&larr;</button><span id="sc">1/10</span><button onclick="pg(1)">&rarr;</button></div></div><div class="ip" id="wi"></div></div>
+</div>
+<div id="wsub-other" style="display:none;flex:1;overflow-y:auto;padding:clamp(20px,3vw,40px) clamp(20px,4vw,48px)">
+<div class="lbl" style="margin-bottom:12px">Other Compositions</div>
+<div id="owlist"></div>
+</div>
+</div>
+
+<!-- PERFORMANCE -->
+<div id="p-perf" class="pane"><div class="cards" id="pc"></div><div class="row">
+<div class="pfv" id="pfv"><img id="pfi" src=""><div class="ov"><a id="pvl" href="" target="_blank" style="text-decoration:none"><div class="pbtn"><svg width="28" height="28" viewBox="0 0 24 24" fill="var(--ac)" stroke="none"><polygon points="8,5 19,12 8,19"/></svg></div><div style="font-family:var(--sans);font-size:11px;color:var(--mu);letter-spacing:.12em;text-transform:uppercase;font-weight:500" id="pvt">Watch</div></a></div></div>
+<div class="ip" id="pi"></div>
+</div></div>
+
+<!-- RESEARCH & TEACHING -->
+<div id="p-res" class="pane">
+<div class="fw2">
+<div class="txt">
+<div style="margin-bottom:12px"><button class="lang on" onclick="rl('en')">EN</button><button class="lang" onclick="rl('pt')">PT</button></div>
+<div id="rt"></div>
+</div>
+<div class="aside">
+<img src="media/img-08.jpg" alt="Prepared cello detail">
+<img src="media/img-09.jpg" alt="entrecorpo setup">
+</div>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="p-contact" class="pane">
+<div class="fw2">
+<div class="txt">
+<div style="margin-bottom:12px"><button class="lang on" onclick="cl2('en')">EN</button><button class="lang" onclick="cl2('pt')">PT</button></div>
+<div id="ct2"></div>
+</div>
+<div class="aside">
+<img src="media/img-10.jpg" alt="">
+<img src="media/img-11.jpg" alt="">
+</div>
+</div>
+</div>
+
+</div>
+<div id="bot"><span>Salvador, Bahia, BR</span><span>&larr; &rarr; flip pages &middot; click score to zoom &middot; esc close</span><a href="https://www.dannielribeiro.com" target="_blank">dannielribeiro.com</a></div>
+</div>
+
+<div id="lb" onclick="clb()"><img id="lbi" src=""></div>
+<script>
+const ECP="media/img-12.jpg";
+const ECT="media/img-13.jpg";
+const PPU="media/img-14.jpg";
+const PST="media/img-15.jpg";
+const PBW="media/img-16.jpg";
+const PDK="media/img-17.jpg";
+const PEW="media/img-18.jpg";
+const PSS="media/img-19.jpg";
+const PPATCH="media/img-20.jpg";
+const AEC3="media/audio-21.mp3";
+const AEC4="media/audio-22.mp3";
+const AOUT="media/audio-23.mp3";
+const ABAR="media/audio-24.mp3";
+const ASHP="media/audio-25.mp3";
+const VDEMO="media/video-26.mp4";
+const SP={outpouring:["media/img-27.jpg","media/img-28.jpg","media/img-29.jpg","media/img-30.jpg","media/img-31.jpg","media/img-32.jpg","media/img-33.jpg","media/img-34.jpg","media/img-35.jpg","media/img-36.jpg"],barrens:["media/img-37.jpg","media/img-38.jpg","media/img-39.jpg","media/img-40.jpg","media/img-41.jpg","media/img-42.jpg","media/img-43.jpg","media/img-44.jpg","media/img-45.jpg","media/img-46.jpg"],shaped:["media/img-47.jpg","media/img-48.jpg","media/img-49.jpg","media/img-50.jpg","media/img-51.jpg","media/img-52.jpg","media/img-53.jpg","media/img-54.jpg","media/img-55.jpg","media/img-56.jpg"]};
+const SF="https://drive.google.com/drive/folders/14RqOR5fgl_WQKSQUi_J6YuLSVccXG1KB";
+
+const WK=[
+{id:'ec',t:'entrecorpo',y:'2025',ie:'Prepared guitars, tabletop cello, accessory instruments, objects & live electronics',ip:'Guitarras preparadas, violoncelo de mesa, instrumentos acess\u00f3rios, objetos e eletr\u00f4nica ao vivo',de:"Hybrid work \u00b7 Parts I\u2013VII \u00b7 85'",dp:"Obra h\u00edbrida \u00b7 Partes I\u2013VII \u00b7 85'",ce:'Dissertation work \u00b7 UC Berkeley (CNMAT) \u00b7 Advised by Edmund Campion',cp:'Obra de doutorado \u00b7 UC Berkeley (CNMAT) \u00b7 Orienta\u00e7\u00e3o de Edmund Campion',ne:'A multi-station solo performance environment. The score exists as two complementary maps: <em>entrelugar</em> (as passage) and <em>entrecorpo</em> (as territory). The performer navigates the ecology by choosing pathways, each station presenting its own instrumental configuration and notational vocabulary.',np:'Ambiente de performance solo multi-esta\u00e7\u00e3o. A partitura existe como dois mapas complementares: <em>entrelugar</em> (como passagem) e <em>entrecorpo</em> (como territ\u00f3rio), onde todas as possibilidades coexistem.',pp:[ECP,ECT],lk:`<a class="link hi" href="${SF}" target="_blank">\u25b6 Recordings</a><a class="link" href="https://escholarship.org/uc/item/1pn3g5ps" target="_blank">Dissertation \u2197</a>`,au:[{s:AEC3,n:'a stone that bears my name (entrecorpo III)',sub:'Solo prepared electric guitar (magnets, honey dipper, E-Bow) \u00b7 Performed by Danniel Ribeiro'},{s:AEC4,n:'where gesture bleeds (entrecorpo IV)',sub:'Horizontal tabletop guitar + cello, mallets, bows, plastic knives \u00b7 Performed by Danniel Ribeiro'}]},
+{id:'out',t:'outpouring beneath my skin',y:'2024',ie:'Oboe, contrabass clarinet, violin, viola, prepared snare drum, chair-string system, transducers & playback',ip:'Obe\u0301, clarinete contrabaixo, violino, viola, caixa preparada, sistema cadeira-corda, transdutores e playback',de:"ca. 13' \u00b7 collective lovemusic \u00b7 HEAR, Strasbourg \u00b7 May 2024",dp:"ca. 13' \u00b7 collective lovemusic \u00b7 HEAR, Estrasburgo \u00b7 Maio 2024",ce:'Generation Next, Conservatoire de Strasbourg',cp:'Programa Generation Next, Conservatoire de Strasbourg',ne:"Four musicians navigate a shared prepared snare drum, chair-string slingshots, corrugated tubes, and clay saucers alongside their instruments. Temporal suspension sections with playback alternate with chronometrically notated passages.",np:'Quatro m\u00fasicos navegam uma caixa preparada compartilhada, estilingues de cadeira-corda, tubos corrugados e pires de argila. Se\u00e7\u00f5es de suspens\u00e3o temporal com playback alternam-se com passagens cronometricamente notadas.',pp:SP.outpouring,lk:`<a class="link hi" href="https://www.dannielribeiro.com/copy-of-already-gone" target="_blank">\u25b6 Listen</a><a class="link" href="${SF}" target="_blank">Full Score \u2197</a>`,au:[{s:AOUT,n:'excerpt (from score page 13)',sub:'Premiere recording \u00b7 collective lovemusic \u00b7 Score pages correspond to this excerpt'}]},
+{id:'bar',t:'beyond the barrens',y:'2023',ie:'Bass flute / C flute, baritone saxophone, piano, accordion, violin & cello',ip:'Flauta baixo / flauta em d\u00f3, saxofone bar\u00edtono, piano, acorde\u00e3o, violino e violoncelo',de:"ca. 10' \u00b7 Schallfeld Ensemble \u00b7 cond. Pierre-Andr\u00e9 Valade \u00b7 Klangspuren Schwaz \u00b7 Sep 2023",dp:"ca. 10' \u00b7 Schallfeld Ensemble \u00b7 reg. Pierre-Andr\u00e9 Valade \u00b7 Klangspuren Schwaz \u00b7 Set 2023",ce:'Composers Lab 2023',cp:'Composers Lab 2023',ne:'Prepared baritone saxophone with aluminum foil bell and vinyl tube mouthpiece. Violin and cello with scordatura. Piano interior bowed through cardboard, porcelain plates scraped across strings. Incomplete time signatures fracture the metric grid.',np:'Saxofone bar\u00edtono preparado com papel alum\u00ednio e tubo de vinil. Violino e violoncelo com scordatura. Piano interior tocado com arco atrav\u00e9s de papel\u00e3o. F\u00f3rmulas de compasso incompletas fraturam a grade m\u00e9trica.',pp:SP.barrens,lk:`<a class="link hi" href="https://www.dannielribeiro.com/beyond-the-barrens" target="_blank">\u25b6 Listen</a><a class="link" href="${SF}" target="_blank">Full Score \u2197</a>`,au:[{s:ABAR,n:'excerpt',sub:'Premiere recording \u00b7 Schallfeld Ensemble, cond. Pierre-Andr\u00e9 Valade'}]},
+{id:'shp',t:'shaped and already gone',y:'2023',ie:'2 pianists, 2 percussionists (amplified piano, prepared bass drum, vibraphone, snare & playback)',ip:'2 pianistas, 2 percussionistas (piano amplificado, bumbo preparado, vibrafone, caixa e playback)',de:"ca. 13' \u00b7 Yarn/Wire \u00b7 Hertz Hall, UC Berkeley \u00b7 Dec 2023",dp:"ca. 13' \u00b7 Yarn/Wire \u00b7 Hertz Hall, UC Berkeley \u00b7 Dez 2023",ce:'',cp:'',ne:'Written for Yarn/Wire. Amplification and MIDI-triggered playback transform the piano into a resonating body. Prepared bass drum with guitar string, bowed cardboard, porcelain plates scraped across piano strings.',np:'Escrita para Yarn/Wire. Amplifica\u00e7\u00e3o e playback por MIDI transformam o piano em um corpo ressonante. Bumbo preparado, papel\u00e3o com arco, pratos de porcelana raspados nas cordas.',pp:SP.shaped,lk:`<a class="link hi" href="https://www.dannielribeiro.com/already-gone" target="_blank">\u25b6 Listen</a><a class="link" href="${SF}" target="_blank">Full Score \u2197</a>`,au:[{s:ASHP,n:'excerpt',sub:'Premiere recording \u00b7 Yarn/Wire'}]},
+];
+
+const OW=[
+{t:'nameless thirst (afterlight)',y:'2024',i:'tenor sax, percussion & viola',d:"ca. 12'",e:'Vertixe Sonora',p:'Plurisons Festival, Belo Horizonte',sc:'https://www.dannielribeiro.com'},
+{t:'feigned spells and anacruses',y:'2024',i:'fl, cl, pno & vln',d:"ca. 10'",e:'Barcelona Modern',p:'Barcelona Modern Festival, Phonos Foundation',sc:'https://www.dannielribeiro.com'},
+{t:'proximity (bodiless etchings)',y:'2023',i:'flute & violin',d:"ca. 8'",e:'Suono Giallo',p:'ilSUONO, Sansepolcro, Italy',sc:'https://www.dannielribeiro.com'},
+{t:'surrogate heart',y:'2022',i:'2 trombones, accessories & electronics',d:"ca. 12'",e:'RAGE Thormbones',p:'CNMAT, UC Berkeley',sc:'https://www.dannielribeiro.com'},
+{t:'fate(un)strung',y:'2021',i:'vln, vla, re-embodied cello & electronics',d:"ca. 15'",e:'Eco Ensemble',p:'CNMAT + CNSMD Lyon',sc:'https://www.dannielribeiro.com'},
+{t:'cleaved shallow water',y:'2021',i:'fl, perc, electric guitar & vln/vla',d:"ca. 9'",e:'Dal Niente',p:'DePaul Univ. + XXV Bienal (award)',sc:'https://www.dannielribeiro.com'},
+{t:'as eroding arches collide',y:'2021',i:'string quartet',d:"ca. 8'",e:'JACK Quartet',p:'Mivos/Kanter Prize finalist',sc:'https://www.dannielribeiro.com'},
+{t:'translucency and wavering bodies',y:'2017',i:'cl, perc, pno, vln & vc',d:"ca. 9'",e:"L'Instant Donn\u00e9",p:'Musica Festival, Strasbourg',sc:'https://www.dannielribeiro.com'},
+];
+
+const PFIMG=[PST,PEW,PSS];
+const PF=[
+{t:'the glitch bloom',y:'2025',co:'Eda Er',ie:'Voice, objects & electronics + prepared electric guitars, objects & electronics',ip:'Voz, objetos e eletr\u00f4nica + guitarras preparadas, objetos e eletr\u00f4nica',de:"ca. 25' \u00b7 Dresher Ensemble Studio, Oakland (Sf Sound) \u00b7 Aug 2025",dp:"ca. 25' \u00b7 Dresher Ensemble Studio, Oakland \u00b7 Ago 2025",ne:'Collaborative improvised performance where composed work, improvisation, and multimedia dissolve into a singular sonic territory.',np:'Performance improvisada colaborativa onde composi\u00e7\u00e3o, improvisa\u00e7\u00e3o e multim\u00eddia dissolvem-se em um territ\u00f3rio sonoro singular.',gd:'https://drive.google.com/file/d/1oejItLZfYNoffHNOPtdlHhbKXvemSW4S/view',yt:'https://www.youtube.com/watch?v=Y9qH3qH8QQ0',w:'https://www.theglitchbloom.com/',sp:'https://open.spotify.com/artist/5wEBPoPNVxpNxkpO2Sb3B7'},
+{t:'palpability',s:'improvisation triptych I',y:'2023',ie:'Audiovisual comprovisation',ip:'Comprovisa\u00e7\u00e3o audiovisual',de:"8'47\"",dp:"8'47\"",ne:'Audiovisual triptych of combined separately recorded standalone improvisations.',np:'Tr\u00edptico audiovisual de improvisa\u00e7\u00f5es independentes combinadas.',yt:'https://www.youtube.com/watch?v=KoU4ULkp4Co'},
+{t:'isthmus|vertebrae',s:'album, 4 parts',y:'2023',ie:'Solo improvised performances \u00b7 various setups',ip:'Performances solo improvisadas \u00b7 configura\u00e7\u00f5es diversas',de:'Bay Area / Bahia, 2023',dp:'Bay Area / Bahia, 2023',ne:'Four solo improvised performances across two geographies.',np:'Quatro performances solo improvisadas entre duas geografias.',yt:'https://soundcloud.com/danniel-ferraz-ribeiro/isthmus-vertebrae-iv/sets'},
+];
+
+const RES={
+en:`<div class="lbl">Research</div>
+<h2>How the work generates its ideas</h2>
+<p>My work as a composer, performer, and sound artist investigates how instruments can be expanded, combined, and reconfigured to produce new musical situations. I build hybrid instrumental ecologies: performance environments where acoustic instruments, preparations, objects, transducers, contact microphones, and live electronics operate as a single interconnected system rather than as separate layers.</p>
+<p>In notated works for ensembles, this takes the form of bespoke techniques and shared instruments that redistribute the roles of performers. In <em>outpouring beneath my skin</em> (2024), written for collective lovemusic, four musicians share a central prepared snare drum fitted with guitar strings, transducers, and a singing bowl, while chair-string slingshots and corrugated tubes extend each player's reach. The notation combines chronometric time-strips, ritornello blocks with performer-chosen ordering, and graphic supplementary staves. In <em>beyond the barrens</em> (2023), written for Schallfeld Ensemble, incomplete time signatures fracture the metric grid while the piano interior is bowed through a cardboard box and porcelain plates are scraped across strings.</p>
+<p>In solo performance, <em>entrecorpo</em> (2025) brings these concerns into a single body navigating a multi-station environment of prepared electric guitars, a tabletop cello, objects, and a real-time processing system built in Max/MSP. The processing architecture uses corpus-based concatenative synthesis (CataRT, FluCoMa), machine-listening feedback (Somax), physical modeling (Modalys), and spectral manipulation in a recursive system where the machine's output feeds back into its own analysis, producing emergent sonic behaviors at the margins of the performer's control.</p>
+<p>In collaborative improvisation, <em>the glitch bloom</em> with Eda Er explores how two performers with distinct instrumental practices build a shared sonic territory through sustained dialogue rather than predetermined structure.</p>
+<p>The theoretical framework draws on Silviano Santiago's <em>entre-lugar</em>, Souriau's <em>instauration</em>, and Lachenmann's approach to instrumental materiality. My doctoral dissertation, <em>Syncretic Instrumentality and the Utopian Gesture</em> (<a href="https://escholarship.org/uc/item/1pn3g5ps" target="_blank" style="color:var(--ac)">UC Berkeley, 2025</a>), develops two central concepts: <em>instrumentalidade sincr\u00e9tica</em>, naming the condition where acoustic and electronic components constitute a single performative body, and the <em>gesto ut\u00f3pico</em>, orienting the performer toward what the ecology cannot yet do.</p>
+<a class="link hi" href="https://escholarship.org/uc/item/1pn3g5ps" target="_blank">Dissertation \u2197</a>
+<a class="link" href="https://escholarship.mcgill.ca/concern/theses/ks65hf631" target="_blank">Master's Thesis \u2197</a>
+<div class="sep"><div class="lbl">Software: Max/MSP Performance System</div>
+<p>The <em>entrecorpo</em> performance patch is a multi-modal, multi-instrument processing system integrating nine interconnected modules. Real-time corpus building feeds levels of concatenative synthesis (CataRT, FluCoMa), while Somax provides machine-listening-driven generative responses. These interact recursively with physical modeling (Modalys), spectral freezing, granular manipulation, and Karplus-Strong synthesis, generating an automated feedback system that pushes the processing toward marginal, emergent behaviors beyond direct performer control.</p>
+<img class="patchimg" src="${PPATCH}" alt="entrecorpo performance patch" onclick="olb(this.src)">
+<div class="vdemo"><div class="vl">Processing Demo</div><video controls preload="metadata" src="${VDEMO}" style="width:100%;max-width:640px;border-radius:4px"></video></div>
+</div>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Teaching</div>
+<p><strong>Instructor & Project Coordinator, <a href="https://music.berkeley.edu" target="_blank" style="color:var(--ac)">UC Berkeley</a> (2020\u20132025)</strong><br>Six courses in music technology, composition, theory, perception/cognition, and interdisciplinary studies. Classes from 20 to 400 students. Directed the university orchestra: 120+ musicians, 12 annual concerts. Developed instructional materials and hybrid technical labs at <a href="https://cnmat.berkeley.edu" target="_blank" style="color:var(--ac)">CNMAT</a>. Outstanding Graduate Student Instructor Award (2022).</p>
+<p><strong>Research Assistant & Instructor, <a href="https://www.mcgill.ca/music/" target="_blank" style="color:var(--ac)">McGill University</a> (2016\u20132018)</strong><br>Technical support for academic productions. Notation software workshops and live electronic systems operation (Max/MSP).</p>
+<p><strong>Artistic Producer, Festival M\u00fasica de Agora na Bahia (2012\u20132015)</strong><br>Large-scale festival (Petrobras): ~100 events per edition, 40+ premieres. Educational outreach for public schools.</p></div>
+<div class="sep"><div class="lbl" style="margin-bottom:8px">Areas of Practice</div>
+<div class="pills"><span>Education & Training</span><span>Sound Production</span><span>Artistic Direction</span><span>Live Performance</span><span>Creative Technology</span><span>Project Management</span></div></div>`,
+
+pt:`<div class="lbl">Pesquisa</div>
+<h2>Como a pr\u00e1tica gera suas ideias</h2>
+<p>Meu trabalho como compositor, performer e artista sonoro investiga como instrumentos podem ser expandidos, combinados e reconfigurados para produzir novas situa\u00e7\u00f5es musicais. Construo ecologias instrumentais h\u00edbridas: ambientes de performance onde instrumentos ac\u00fasticos, prepara\u00e7\u00f5es, objetos, transdutores, microfones de contato e eletr\u00f4nica ao vivo operam como um sistema \u00fanico e interconectado.</p>
+<p>Em obras notadas para ensembles, isso se d\u00e1 atrav\u00e9s de t\u00e9cnicas espec\u00edficas e instrumentos compartilhados que redistribuem os pap\u00e9is dos performers. Em <em>outpouring beneath my skin</em> (2024), escrita para collective lovemusic, quatro m\u00fasicos compartilham uma caixa preparada central com cordas de guitarra, transdutores e singing bowl, enquanto estilingues de cadeira-corda e tubos corrugados estendem o alcance de cada performer. Em <em>beyond the barrens</em> (2023), para Schallfeld Ensemble, f\u00f3rmulas de compasso incompletas fraturam a grade m\u00e9trica enquanto o interior do piano \u00e9 tocado com arco atrav\u00e9s de papel\u00e3o.</p>
+<p>Em performance solo, <em>entrecorpo</em> (2025) concentra essas preocupa\u00e7\u00f5es em um \u00fanico corpo navegando um ambiente multi-esta\u00e7\u00e3o. A arquitetura de processamento usa s\u00edntese concatenativa baseada em corpus (CataRT, FluCoMa), feedback por escuta de m\u00e1quina (Somax), modelagem f\u00edsica (Modalys) e manipula\u00e7\u00e3o espectral em um sistema recursivo que produz comportamentos sonoros emergentes nas margens do controle do performer.</p>
+<a class="link hi" href="https://escholarship.org/uc/item/1pn3g5ps" target="_blank">Tese de Doutorado \u2197</a>
+<a class="link" href="https://escholarship.mcgill.ca/concern/theses/ks65hf631" target="_blank">Disserta\u00e7\u00e3o de Mestrado \u2197</a>
+<div class="sep"><div class="lbl">Software: Sistema de Performance Max/MSP</div>
+<p>O patch de performance de <em>entrecorpo</em> \u00e9 um sistema multi-modal que integra nove m\u00f3dulos interconectados. Constru\u00e7\u00e3o de corpus em tempo real alimenta n\u00edveis de s\u00edntese concatenativa (CataRT, FluCoMa), enquanto Somax fornece respostas generativas por machine-listening. Esses interagem recursivamente com modelagem f\u00edsica (Modalys), congelamento espectral, manipula\u00e7\u00e3o granular e s\u00edntese Karplus-Strong, gerando um sistema de feedback automatizado que empurra o processamento para comportamentos marginais e emergentes.</p>
+<img class="patchimg" src="${PPATCH}" alt="patch de performance" onclick="olb(this.src)">
+<div class="vdemo"><div class="vl">Demo de Processamento</div><video controls preload="metadata" src="${VDEMO}" style="width:100%;max-width:640px;border-radius:4px"></video></div>
+</div>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Ensino</div>
+<p><strong>Instrutor e Coordenador, <a href="https://music.berkeley.edu" target="_blank" style="color:var(--ac)">UC Berkeley</a> (2020\u20132025)</strong><br>Seis disciplinas em tecnologia musical, composi\u00e7\u00e3o, teoria, percep\u00e7\u00e3o/cogni\u00e7\u00e3o e estudos interdisciplinares. Turmas de 20 a 400 alunos. Dire\u00e7\u00e3o da orquestra: 120+ m\u00fasicos, 12 concertos anuais. Outstanding GSI Award (2022).</p>
+<p><strong>Assistente de Pesquisa, <a href="https://www.mcgill.ca/music/" target="_blank" style="color:var(--ac)">McGill University</a> (2016\u20132018)</strong><br>Suporte t\u00e9cnico. Workshops de nota\u00e7\u00e3o e sistemas eletr\u00f4nicos ao vivo (Max/MSP).</p>
+<p><strong>Produtor Art\u00edstico, Festival M\u00fasica de Agora na Bahia (2012\u20132015)</strong><br>Festival de grande porte (Petrobras): ~100 eventos, 40+ estreias. Extens\u00e3o educacional.</p></div>`
+};
+
+const CON={
+en:`<div class="lbl">Contact</div><h2 style="font-size:clamp(24px,3vw,30px);margin-bottom:20px">Danniel Ribeiro, Ph.D.</h2>
+<p>Composer, sound artist, and performer with a Ph.D. from UC Berkeley. Professional trajectory across four countries (Brazil, Canada, France, USA). Active performer and collaborator with international ensembles across three continents.</p>
+<a class="clink" href="mailto:dannfribeiro@gmail.com"><span class="ci">\u2709</span>dannfribeiro@gmail.com</a>
+<a class="clink" href="https://www.dannielribeiro.com"><span class="ci">\u2625</span>dannielribeiro.com</a>
+<a class="clink" href="https://www.linkedin.com/in/danniel-ribeiro/"><span class="ci">in</span>linkedin.com/in/danniel-ribeiro</a>
+<a class="clink" href="https://soundcloud.com/danniel-ferraz-ribeiro"><span class="ci">\u266b</span>soundcloud</a>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Education</div>
+<div class="cred"><strong>Ph.D. Music (Composition)</strong>, <a href="https://music.berkeley.edu">UC Berkeley</a>, 2025. Full fellowship (6 years).</div>
+<div class="cred"><strong>Specialization</strong>, <a href="https://www.hear.fr">Conservatoire de Strasbourg</a>, 2024. Merit fellowship.</div>
+<div class="cred"><strong>M.Mus. Composition</strong>, <a href="https://www.mcgill.ca/music/">McGill University</a>, 2018. Full fellowship. <a href="https://escholarship.mcgill.ca/concern/theses/ks65hf631">Thesis \u2197</a></div>
+<div class="cred"><strong>B.Mus. Composition & Conducting</strong>, <a href="https://www.ufba.br">UFBA</a>, 2014. CNPq Research Fellow.</div></div>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Selected Awards</div>
+<div class="cred">Nicola De Lorenzo Prize in Music Composition, 2025</div><div class="cred">George Ladd Prix de Paris, UC Berkeley, 2023/24</div>
+<div class="cred">FUNARTE National Prize (4x: 2012, 2014, 2016, 2023)</div><div class="cred">Outstanding GSI Award, UC Berkeley, 2022</div></div>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Selected Collaborators</div>
+<div class="cred" style="line-height:1.9">JACK Quartet \u00b7 Yarn/Wire \u00b7 Schallfeld Ensemble \u00b7 L\u2019Instant Donn\u00e9 \u00b7 collective lovemusic \u00b7 Dal Niente \u00b7 Suono Giallo \u00b7 RAGE Thormbones \u00b7 Vertixe Sonora \u00b7 Barcelona Modern \u00b7 Paramirabo \u00b7 Eco Ensemble \u00b7 Eda Er \u00b7 Pierre-Andr\u00e9 Valade</div></div>
+<div class="sep"><div class="lbl">References</div><div class="cred">Available upon request. Faculty from UC Berkeley, McGill University, and UFBA.</div></div>`,
+pt:`<div class="lbl">Contato</div><h2 style="font-size:clamp(24px,3vw,30px);margin-bottom:20px">Danniel Ribeiro, Ph.D.</h2>
+<p>Compositor, artista sonoro e performer com doutorado pela UC Berkeley. Trajet\u00f3ria em quatro pa\u00edses. Colaborador ativo com ensembles internacionais em tr\u00eas continentes.</p>
+<a class="clink" href="mailto:dannfribeiro@gmail.com"><span class="ci">\u2709</span>dannfribeiro@gmail.com</a>
+<a class="clink" href="https://www.dannielribeiro.com"><span class="ci">\u2625</span>dannielribeiro.com</a>
+<a class="clink" href="https://www.linkedin.com/in/danniel-ribeiro/"><span class="ci">in</span>linkedin.com/in/danniel-ribeiro</a>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Forma\u00e7\u00e3o</div>
+<div class="cred"><strong>Doutorado (Composi\u00e7\u00e3o)</strong>, <a href="https://music.berkeley.edu">UC Berkeley</a>, 2025. <a href="https://escholarship.org/uc/item/1pn3g5ps">Tese \u2197</a></div>
+<div class="cred"><strong>Especializa\u00e7\u00e3o</strong>, <a href="https://www.hear.fr">Conservatoire de Strasbourg</a>, 2024.</div>
+<div class="cred"><strong>Mestrado</strong>, <a href="https://www.mcgill.ca/music/">McGill University</a>, 2018. <a href="https://escholarship.mcgill.ca/concern/theses/ks65hf631">Disserta\u00e7\u00e3o \u2197</a></div>
+<div class="cred"><strong>Bacharelado</strong>, <a href="https://www.ufba.br">UFBA</a>, 2014.</div></div>
+<div class="sep"><div class="lbl" style="margin-bottom:12px">Pr\u00eamios</div>
+<div class="cred">Nicola De Lorenzo Prize, 2025</div><div class="cred">George Ladd Prix de Paris, 2023/24</div>
+<div class="cred">Pr\u00eamio FUNARTE (4x: 2012\u20132023)</div><div class="cred">Outstanding GSI Award, 2022</div></div>
+<div class="sep"><div class="lbl">Refer\u00eancias</div><div class="cred">Dispon\u00edveis mediante solicita\u00e7\u00e3o.</div></div>`
+};
+
+let cw=0,cp=0,cpf=0,wl='en',pl='en';
+
+function enter(){document.getElementById('hero').classList.add('h');sw(0)}
+function goHome(){document.getElementById('hero').classList.remove('h')}
+function nav(n){document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));document.getElementById('p-'+n).classList.add('on');['works','perf','res','contact'].forEach((nm,i)=>{document.querySelectorAll('.nb')[i].classList.toggle('on',nm===n)})}
+
+function wsub(s){
+  document.getElementById('wsub-comp').style.display=s==='comp'?'flex':'none';
+  document.getElementById('wsub-other').style.display=s==='other'?'block':'none';
+  document.querySelectorAll('#wst .stab').forEach((b,i)=>b.classList.toggle('on',['comp','other'][i]===s));
+  if(s==='other'){
+    let h='';OW.forEach(o=>{h+=`<div class="ow"><span class="oy">${o.y}</span><strong>${o.t}</strong><br>${o.i} \u00b7 ${o.d} \u00b7 ${o.e} \u00b7 ${o.p}<br><a href="${o.sc}" target="_blank">\u25b6 recording</a></div>`});
+    document.getElementById('owlist').innerHTML=h;
+  }
+}
+
+function bc(){
+  let h='';WK.forEach((w,i)=>{h+=`<button class="${i===cw?'on':''}" onclick="sw(${i})"><div class="y">${w.y}</div><div class="t">${w.t}</div></button>`});
+  document.getElementById('wc').innerHTML=h;
+  h='';PF.forEach((p,i)=>{h+=`<button class="${i===cpf?'on':''}" onclick="spf(${i})"><div class="y">${p.y}</div><div class="t">${p.t}</div></button>`});
+  document.getElementById('pc').innerHTML=h;
+}
+
+function sw(i){cw=i;cp=0;const w=WK[i];document.getElementById('si').src=w.pp[0];document.getElementById('sc').textContent=`1/${w.pp.length}`;document.getElementById('sv').classList.remove('z');document.getElementById('si').style.width='';uwi();bc()}
+
+function uwi(){
+  const w=WK[cw];const e=wl==='en';
+  let h=`<div class="lbl">${w.y} \u00b7 ${cw===0?(e?'Dissertation Work':'Obra de Doutorado'):(e?(w.de.split('\u00b7')[1]||'').trim():(w.dp.split('\u00b7')[1]||'').trim())}</div>`;
+  h+=`<h2>${w.t}</h2><div class="inst">${e?w.ie:w.ip}</div><div class="det">${e?w.de:w.dp}</div>`;
+  const cx=e?w.ce:w.cp;if(cx)h+=`<div class="det">${cx}</div>`;
+  h+=`<div style="margin:12px 0"><button class="lang ${wl==='en'?'on':''}" onclick="wl='en';uwi()">EN</button><button class="lang ${wl==='pt'?'on':''}" onclick="wl='pt';uwi()">PT</button></div>`;
+  h+=`<div class="desc">${e?w.ne:w.np}</div><div>${w.lk}</div>`;
+  if(w.au&&w.au.length>0){w.au.forEach(a=>{h+=`<div class="ap"><div class="al">${a.n}</div><div class="asub">${a.sub||''}</div><audio controls preload="metadata" src="${a.s}"></audio></div>`})}
+  document.getElementById('wi').innerHTML=h;
+}
+
+function pg(d){
+  const w=WK[cw];const np=cp+d;
+  if(np>=0&&np<w.pp.length){
+    cp=np;document.getElementById('si').src=w.pp[cp];
+    document.getElementById('sc').textContent=`${cp+1}/${w.pp.length}`;
+    document.getElementById('sv').classList.remove('z');
+    document.getElementById('si').style.width='';
+  }
+}
+
+function doZoom(){
+  const sv=document.getElementById('sv');
+  const img=document.getElementById('si');
+  sv.classList.toggle('z');
+  img.style.width=sv.classList.contains('z')?'220%':'';
+  if(!sv.classList.contains('z')){sv.scrollTop=0;sv.scrollLeft=0}
+}
+
+function spf(i){
+  cpf=i;const p=PF[i];const e=pl==='en';
+  document.getElementById('pfi').src=PFIMG[i];
+  let h=`<div class="lbl">${p.y}${p.co?' \u00b7 '+(e?'with':'com')+' '+p.co:' \u00b7 Solo'}</div>`;
+  h+=`<h2>${p.t}</h2>`;
+  if(p.s)h+=`<div style="font-family:var(--serif);font-size:14px;font-style:italic;color:var(--mu);margin-bottom:8px">${p.s}</div>`;
+  h+=`<div class="inst">${e?p.ie:p.ip}</div><div class="det">${e?p.de:p.dp}</div>`;
+  h+=`<div style="margin:12px 0"><button class="lang ${pl==='en'?'on':''}" onclick="pl='en';spf(${cpf})">EN</button><button class="lang ${pl==='pt'?'on':''}" onclick="pl='pt';spf(${cpf})">PT</button></div>`;
+  h+=`<div class="desc">${e?p.ne:p.np}</div>`;
+  // Links
+  if(p.gd)h+=`<a class="link hi" href="${p.gd}" target="_blank">\u25b6 Watch (GDrive)</a>`;
+  if(p.yt)h+=`<a class="link" href="${p.yt}" target="_blank">\u25b6 Watch (YouTube)</a>`;
+  else if(!p.gd)h+=`<a class="link hi" href="${p.yt||'#'}" target="_blank">\u25b6 ${i===2?'Listen':'Watch'}</a>`;
+  if(p.w)h+=`<a class="link" href="${p.w}" target="_blank">Project Site \u2197</a>`;
+  if(p.sp)h+=`<a class="link" href="${p.sp}" target="_blank">\u266b Spotify</a>`;
+  document.getElementById('pi').innerHTML=h;
+  // Play button links to GDrive if available, else YouTube
+  document.getElementById('pvl').href=p.gd||p.yt||'#';
+  document.getElementById('pvt').textContent=i===2?'Listen':'Watch Performance';
+  bc();
+}
+
+function rl(l){document.getElementById('rt').innerHTML=RES[l];document.querySelectorAll('#p-res .lang').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()))}
+function cl2(l){document.getElementById('ct2').innerHTML=CON[l];document.querySelectorAll('#p-contact .lang').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()))}
+function olb(s){document.getElementById('lbi').src=s;document.getElementById('lb').classList.add('on')}
+function clb(){document.getElementById('lb').classList.remove('on')}
+
+// ARROW KEYS - fixed
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'){e.preventDefault();pg(1)}
+  if(e.key==='ArrowLeft'){e.preventDefault();pg(-1)}
+  if(e.key==='Escape')clb();
+});
+
+// Init
+bc();sw(0);spf(0);rl('en');cl2('en');wsub('comp');
+</script></body></html>
